@@ -120,4 +120,13 @@
         android:id="@+id/skip_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/thumbnail_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="180dp"
+        android:visibility="gone"
+        android:contentDescription="@string/thumbnail_preview" />
 </FrameLayout>
