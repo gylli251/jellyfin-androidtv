@@ -18,4 +18,10 @@ class CustomSeekProvider(
 		val size = ceil(duration.toDouble() / SEEK_LENGTH.toDouble()).toInt() + 1
 		return LongArray(size) { i -> min(i * SEEK_LENGTH, duration) }
 	}
+
+	override fun getThumbnailSeekData(position: Long): Bitmap? {
+		val thumbnailSet = videoPlayerAdapter.getThumbnailSet() ?: return null
+		val thumbnailIndex = (position / SEEK_LENGTH).toInt()
+		return thumbnailSet.getThumbnail(thumbnailIndex)
+	}
 }

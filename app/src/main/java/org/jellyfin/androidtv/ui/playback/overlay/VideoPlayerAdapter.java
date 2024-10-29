@@ -9,6 +9,10 @@ import org.jellyfin.androidtv.ui.playback.PlaybackController;
 import org.jellyfin.androidtv.util.Utils;
 import org.jellyfin.androidtv.util.apiclient.StreamHelper;
 import org.jellyfin.sdk.model.api.ChapterInfo;
+import org.jellyfin.sdk.model.api.ThumbnailSet;
+import org.jellyfin.sdk.model.api.ThumbnailSetInfo;
+import org.jellyfin.sdk.model.api.ThumbnailSetRequest;
+import org.jellyfin.sdk.model.api.ThumbnailSetResponse;
 import org.koin.java.KoinJavaComponent;
 
 import java.util.List;
@@ -18,6 +22,7 @@ public class VideoPlayerAdapter extends PlayerAdapter {
     private final PlaybackController playbackController;
     private CustomPlaybackOverlayFragment customPlaybackOverlayFragment;
     private LeanbackOverlayFragment leanbackOverlayFragment;
+    private ThumbnailSet thumbnailSet;
 
     VideoPlayerAdapter(PlaybackController playbackController, LeanbackOverlayFragment leanbackOverlayFragment) {
         this.playbackController = playbackController;
@@ -168,5 +173,27 @@ public class VideoPlayerAdapter extends PlayerAdapter {
         org.jellyfin.sdk.model.api.BaseItemDto item = getCurrentlyPlayingItem();
         List<ChapterInfo> chapters = item.getChapters();
         return chapters != null && chapters.size() > 0;
+    }
+
+    public void loadThumbnailSet() {
+        org.jellyfin.sdk.model.api.BaseItemDto item = getCurrentlyPlayingItem();
+        if (item != null) {
+            ThumbnailSetRequest request = new ThumbnailSetRequest(item.getId(), item.getRunTimeTicks() / 10000);
+            KoinJavaComponent.get(org.jellyfin.sdk.api.client.ApiClient.class).getThumbnailSet(request, new org.jellyfin.sdk.api.client.Response<ThumbnailSetResponse>() {
+                @Override
+                public void onResponse(ThumbnailSetResponse response) {
+                    thumbnailSet = response.getThumbnailSet();
+                }
+
+                @Override
+                public void onError(Exception exception) {
+                    thumbnailSet = null;
+                }
+            });
+        }
+    }
+
+    public ThumbnailSet getThumbnailSet() {
+        return thumbnailSet;
     }
 }
