@@ -1,5 +1,6 @@
 package org.jellyfin.androidtv.ui.playback.overlay
 
+import android.graphics.Bitmap
 import androidx.leanback.widget.PlaybackSeekDataProvider
 import kotlin.math.ceil
 import kotlin.math.min
